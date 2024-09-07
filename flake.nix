@@ -41,9 +41,18 @@
         satisfactory-server-unwrapped = final.callPackage ./pkgs/satisfactory-server { };
       };
 
-      packages = forAllSystems (system: {
-        inherit (pkgsFor system) satisfactory-server satisfactory-server-fhs;
-        default = (pkgsFor system).satisfactory-server;
-      });
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = pkgsFor system;
+          version = self.shortRev or self.dirtyShortRev;
+          mkOptionDoc = args: (pkgs.callPackage ./pkgs/docs.nix { }) (args // { inherit version; });
+        in
+        {
+          inherit (pkgs) satisfactory-server satisfactory-server-fhs;
+          default = pkgs.satisfactory-server;
+          docs = mkOptionDoc { modules = [ self.nixosModules.satisfactory ]; };
+        }
+      );
     };
 }
