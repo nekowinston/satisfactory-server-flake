@@ -37,7 +37,8 @@
       };
 
       overlays.default = final: prev: {
-        satisfactory-server = final.callPackage ./pkgs/satisfactory-server { };
+        satisfactory-server = (final.callPackage ./pkgs/satisfactory-server { }).fhs;
+        satisfactory-server-unwrapped = final.callPackage ./pkgs/satisfactory-server { };
       };
 
       packages = forAllSystems (system: {

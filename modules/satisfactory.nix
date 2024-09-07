@@ -97,7 +97,7 @@ in
 
       serviceConfig = {
         Type = "exec";
-        User = "satisfactory";
+        User = cfg.user;
         ExecStart = lib.strings.concatStringsSep " " [
           "${lib.getExe cfg.package}"
           "-multihome=${cfg.listenAddress}"

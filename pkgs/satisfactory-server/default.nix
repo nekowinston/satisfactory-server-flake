@@ -1,8 +1,11 @@
 {
+  buildFHSEnv,
   fetchSteam,
   lib,
   makeWrapper,
+  pulseaudio,
   stdenvNoCC,
+  steamworks-sdk-redist,
   xdg-user-dirs,
 }:
 let
@@ -42,6 +45,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.fhs = buildFHSEnv {
+    name = finalAttrs.name;
+    runScript = lib.getExe finalAttrs.finalPackage;
+
+    targetPkgs = pkgs: [
+      finalAttrs.finalPackage
+      pulseaudio
+      steamworks-sdk-redist
+    ];
+
+    meta = finalAttrs.meta;
+  };
 
   meta = with lib; {
     mainProgram = "satisfactory-server";
