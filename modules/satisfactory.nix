@@ -101,9 +101,9 @@ in
         ExecStart = lib.strings.concatStringsSep " " [
           "${lib.getExe cfg.package}"
           "-multihome=${cfg.listenAddress}"
-          "-QueryPort=${cfg.serverQueryPort}"
-          "-BeaconPort=${cfg.beaconPort}"
-          "-GamePort=${cfg.port}"
+          "-QueryPort=${builtins.toString cfg.serverQueryPort}"
+          "-BeaconPort=${builtins.toString cfg.beaconPort}"
+          "-GamePort=${builtins.toString cfg.port}"
         ];
       };
     };
