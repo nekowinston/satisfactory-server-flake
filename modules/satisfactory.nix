@@ -21,13 +21,13 @@ in
     };
 
     user = lib.mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       default = "satisfactory";
       description = "User to run the server as.";
     };
 
     listenAddress = lib.mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       default = "0.0.0.0";
       description = ''
         Bind the server process to a specific IP address rather than all available interfaces.
