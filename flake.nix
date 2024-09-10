@@ -49,7 +49,7 @@
           mkOptionDoc = args: (pkgs.callPackage ./pkgs/docs.nix { }) (args // { inherit version; });
         in
         {
-          inherit (pkgs) satisfactory-server satisfactory-server-fhs;
+          inherit (pkgs) satisfactory-server satisfactory-server-unwrapped;
           default = pkgs.satisfactory-server;
           docs = mkOptionDoc { modules = [ self.nixosModules.satisfactory ]; };
         }

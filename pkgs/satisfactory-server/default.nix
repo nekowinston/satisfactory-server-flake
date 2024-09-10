@@ -19,8 +19,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) name;
     appId = "1690800";
     depotId = "1690802";
-    manifestId = "3834057001613892701";
-    hash = "sha256-LHE64JBPCG92agi6Q9w378UEsU/S05A0AoQWXM+IcSs=";
+    manifestId = "1910179703516567959";
+    hash = "sha256-TxPegZFAwiAzuHgw9xLGr5sAP7KAVMMfPFYL7TRX1O0=";
   };
 
   dontBuild = true;
@@ -35,10 +35,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/share $out/bin
 
     cp -r . $out/share/satisfactory-server
-    chmod +x $out/share/satisfactory-server/Engine/Binaries/Linux/UnrealServer-Linux-Shipping
+    chmod +x $out/share/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping
 
     makeWrapper \
-      $out/share/satisfactory-server/Engine/Binaries/Linux/UnrealServer-Linux-Shipping \
+      $out/share/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping \
       $out/bin/satisfactory-server \
       --add-flags "FactoryGame" \
       --prefix PATH : ${binPath}
