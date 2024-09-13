@@ -26,32 +26,6 @@ in
       description = "User to run the server as.";
     };
 
-    listenAddress = lib.mkOption {
-      type = lib.types.str;
-      default = "0.0.0.0";
-      description = ''
-        Bind the server process to a specific IP address rather than all available interfaces.
-      '';
-    };
-
-    serverQueryPort = lib.mkOption {
-      type = lib.types.port;
-      default = 15777;
-      description = ''
-        Override the Query Port the server uses.
-        This is the port specified in the Server Manager in the client UI to establish a server connection.
-      '';
-    };
-
-    beaconPort = lib.mkOption {
-      type = lib.types.port;
-      default = 15000;
-      description = ''
-        Override the Beacon Port the server uses. As of Update 6, this port can be set freely.
-        If this port is already in use, the server will step up to the next port until an available one is found.
-      '';
-    };
-
     port = lib.mkOption {
       type = lib.types.port;
       default = 7777;
@@ -62,10 +36,48 @@ in
       '';
     };
 
-    openFirewall = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    openFirewall = lib.mkEnableOption "" // {
       description = "Whether to open the ports in the firewall.";
+    };
+
+    settings = lib.mkOption {
+      description = "Satisfactory engine & game settings.";
+      default = { };
+      type = lib.types.submodule {
+        options = {
+          autosaveNumber = lib.mkOption {
+            description = "Specifies the number of rotating autosaves to keep.";
+            type = lib.types.ints.positive;
+            default = 5;
+          };
+          clientTimeout = lib.mkOption {
+            description = "Specifies the number of rotating autosaves to keep.";
+            type = lib.types.ints.positive;
+            default = 5;
+          };
+          streaming = lib.mkEnableOption "asset streaming" // {
+            default = true;
+          };
+          maxObjects = lib.mkOption {
+            description = "Specifies the maximum object limit for the server.";
+            type = lib.types.ints.positive;
+            default = 2162688;
+          };
+          maxTickrate = lib.mkOption {
+            description = "Specifies the maximum tick rate for the server.";
+            type = lib.types.ints.positive;
+            default = 30;
+          };
+          maxPlayers = lib.mkOption {
+            description = "Specifies the maximum number of players to allow on the server.";
+            type = lib.types.ints.positive;
+            default = 4;
+          };
+          seasonalEvents = lib.mkEnableOption "seasonal events, such as FICSMAS" // {
+            default = true;
+          };
+        };
+      };
     };
   };
 
@@ -78,10 +90,10 @@ in
     users = {
       groups.${cfg.user} = { };
       users.${cfg.user} = {
-        isSystemUser = true;
+        createHome = lib.mkDefault true;
         group = cfg.user;
         home = cfg.stateDir;
-        createHome = true;
+        isSystemUser = lib.mkDefault true;
       };
     };
 
@@ -98,22 +110,36 @@ in
       serviceConfig = {
         Type = "exec";
         User = cfg.user;
-        ExecStart = lib.strings.concatStringsSep " " [
-          "${lib.getExe cfg.package}"
-          "-multihome=${cfg.listenAddress}"
-          "-QueryPort=${builtins.toString cfg.serverQueryPort}"
-          "-BeaconPort=${builtins.toString cfg.beaconPort}"
-          "-GamePort=${builtins.toString cfg.port}"
-        ];
+        ExecStart = lib.escapeShellArgs (
+          [
+            (lib.getExe cfg.package)
+            "-ini:Engine:[/Script/Engine.Engine]:NetClientTicksPerSecond=${toString cfg.settings.maxTickrate}"
+            "-ini:Engine:[/Script/Engine.GarbageCollectionSettings]:gc.MaxObjectsInEditor=${toString cfg.settings.maxObjects}"
+            "-ini:Engine:[/Script/FactoryGame.FGSaveSession]:mNumRotatingAutosaves=${toString cfg.settings.autosaveNumber}"
+            "-ini:Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:ConnectionTimeout=${toString cfg.settings.clientTimeout}"
+            "-ini:Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:InitialConnectTimeout=${toString cfg.settings.clientTimeout}"
+            "-ini:Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:LanServerMaxTickRate=${toString cfg.settings.maxTickrate}"
+            "-ini:Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:NetServerMaxTickRate=${toString cfg.settings.maxTickrate}"
+            "-ini:Engine:[ConsoleVariables]:wp.Runtime.EnableServerStreaming=${
+              if cfg.settings.streaming then "1" else "0"
+            }"
+            "-ini:Engine:[Core.Log]:LogNet=Error"
+            "-ini:Engine:[Core.Log]:LogNetTraffic=Warning"
+            "-ini:Game:[/Script/Engine.GameSession]:ConnectionTimeout=${toString cfg.settings.clientTimeout}"
+            "-ini:Game:[/Script/Engine.GameSession]:InitialConnectTimeout=${toString cfg.settings.clientTimeout}"
+            "-ini:Game:[/Script/Engine.GameSession]:MaxPlayers=${toString cfg.settings.maxPlayers}"
+            "-ini:GameUserSettings:[/Script/Engine.GameSession]:MaxPlayers=${toString cfg.settings.maxPlayers}"
+            "-Port=${builtins.toString cfg.port}"
+            "-DisablePacketRouting"
+          ]
+          ++ lib.optionals (!cfg.settings.seasonalEvents) [ "-DisableSeasonalEvents" ]
+        );
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedUDPPorts = [
-        cfg.serverQueryPort
-        cfg.beaconPort
-        cfg.port
-      ];
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
     };
   };
 }

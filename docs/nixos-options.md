@@ -1,7 +1,5 @@
 ## services\.satisfactory\.enable
 
-
-
 Whether to enable Satisfactory Dedicated Server\.
 
 
@@ -39,41 +37,6 @@ package
 
 
 
-## services\.satisfactory\.beaconPort
-
-Override the Beacon Port the server uses\. As of Update 6, this port can be set freely\.
-If this port is already in use, the server will step up to the next port until an available one is found\.
-
-
-
-*Type:*
-16 bit unsigned integer; between 0 and 65535 (both inclusive)
-
-
-
-*Default:*
-` 15000 `
-
-
-
-## services\.satisfactory\.listenAddress
-
-
-
-Bind the server process to a specific IP address rather than all available interfaces\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "0.0.0.0" `
-
-
-
 ## services\.satisfactory\.openFirewall
 
 
@@ -89,6 +52,11 @@ boolean
 
 *Default:*
 ` false `
+
+
+
+*Example:*
+` true `
 
 
 
@@ -112,22 +80,157 @@ If it is already in use, the server will step up to the next port until an avail
 
 
 
-## services\.satisfactory\.serverQueryPort
+## services\.satisfactory\.settings
 
 
 
-Override the Query Port the server uses\.
-This is the port specified in the Server Manager in the client UI to establish a server connection\.
+Satisfactory engine \& game settings\.
 
 
 
 *Type:*
-16 bit unsigned integer; between 0 and 65535 (both inclusive)
+submodule
 
 
 
 *Default:*
-` 15777 `
+` { } `
+
+
+
+## services\.satisfactory\.settings\.autosaveNumber
+
+
+
+Specifies the number of rotating autosaves to keep\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+` 5 `
+
+
+
+## services\.satisfactory\.settings\.clientTimeout
+
+
+
+Specifies the number of rotating autosaves to keep\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+` 5 `
+
+
+
+## services\.satisfactory\.settings\.maxObjects
+
+
+
+Specifies the maximum object limit for the server\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+` 2162688 `
+
+
+
+## services\.satisfactory\.settings\.maxPlayers
+
+
+
+Specifies the maximum number of players to allow on the server\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+` 4 `
+
+
+
+## services\.satisfactory\.settings\.maxTickrate
+
+
+
+Specifies the maximum tick rate for the server\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+` 30 `
+
+
+
+## services\.satisfactory\.settings\.seasonalEvents
+
+
+
+Whether to enable seasonal events, such as FICSMAS\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+
+
+*Example:*
+` true `
+
+
+
+## services\.satisfactory\.settings\.streaming
+
+
+
+Whether to enable asset streaming\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+
+
+*Example:*
+` true `
 
 
 
