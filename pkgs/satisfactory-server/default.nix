@@ -13,14 +13,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "satisfactory-server";
-  version = "15747428";
+  version = "15811013";
 
   src = fetchSteam {
     inherit (finalAttrs) name;
     appId = "1690800";
     depotId = "1690802";
-    manifestId = "796358325859298888";
-    hash = "sha256-Y7gSNV+LhEskfGukJvaIIU7bV/rLFw4Czt+vYMdmnoQ=";
+    manifestId = "4296687721427311235";
+    hash = "sha256-Med50laH6TJTS38a7xuMv3HYlMPM0smPeEdgnviJbzk=";
   };
 
   dontBuild = true;
