@@ -49,7 +49,7 @@ If you want to help out, here's a brief guide:
 1. Visit this [SteamDB page](https://steamdb.info/depot/1690802/history/),
    and make note of both the latest **Manifest ID**, and the **Build ID**.
 
-2. Edit [`./pkgs/Satisfactory-server/default.nix`](./pkgs/Satisfactory-server/default.nix):
+2. Edit [`./pkgs/satisfactory-server/default.nix`](./pkgs/satisfactory-server/default.nix):
 
    - set `version` to the **Build ID**
    - set `src.manifest` to the **Manifest ID**
