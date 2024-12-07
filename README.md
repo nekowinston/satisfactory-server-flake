@@ -10,7 +10,6 @@ Add the flake to your flake inputs:
     satisfactory-server = {
       url = "github:nekowinston/satisfactory-server-flake";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.steam-fetcher.follows = "steam-fetcher";
     };
   };
 }
