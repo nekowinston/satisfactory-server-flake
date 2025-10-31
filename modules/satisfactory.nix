@@ -84,7 +84,7 @@ in
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       self.overlays.default
-      steam-fetcher.overlays.default
+      steam-fetcher.overlay
     ];
 
     users = {
