@@ -8,19 +8,18 @@
   steamworks-sdk-redist,
   xdg-user-dirs,
 }:
-let
-  binPath = lib.makeBinPath [ xdg-user-dirs ];
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "satisfactory-server";
-  version = "16775547";
+  version = "19876517";
+
+  binPath = lib.makeBinPath [ xdg-user-dirs ];
 
   src = fetchSteam {
     inherit (finalAttrs) name;
     appId = "1690800";
     depotId = "1690802";
-    manifestId = "6204133154971956314";
-    hash = "sha256-DeboG3ku37MhQZFj/Y0Hr+kU96Vj8l6DMzZj4Mn4src=";
+    manifestId = "7620210706575413121";
+    hash = "sha256-jQbtHSBFCDcdycrDjIJBY4DGV7EgITvwv3k3+htZ7io=";
   };
 
   dontBuild = true;
@@ -41,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       $out/share/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping \
       $out/bin/satisfactory-server \
       --add-flags "FactoryGame" \
-      --prefix PATH : ${binPath}
+      --prefix PATH : ${finalAttrs.binPath}
 
     runHook postInstall
   '';
@@ -59,16 +58,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     meta = finalAttrs.meta;
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "satisfactory-server";
     description = "Satisfactory dedicated server";
     homepage = "https://steamdb.info/app/1690800/";
     changelog = "https://store.steampowered.com/news/app/526870?updates=true";
-    sourceProvenance = with sourceTypes; [
-      binaryBytecode
-      binaryNativeCode
+    sourceProvenance = [
+      lib.sourceTypes.binaryBytecode
+      lib.sourceTypes.binaryNativeCode
     ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 })

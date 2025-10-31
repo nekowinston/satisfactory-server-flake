@@ -56,7 +56,7 @@ If you want to help out, here's a brief guide:
 
 3. To fetch the hash for the latest version, run:
    ```command
-   NIXPKGS_ALLOW_UNFREE=1 nix build --impure .#packages.x86_64-linux.default
+   NIXPKGS_ALLOW_UNFREE=1 nix-build
    ```
 
 4. The build will error out, warning about a mismatched hash; update `src.hash` to the new hash.
