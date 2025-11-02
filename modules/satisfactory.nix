@@ -230,7 +230,7 @@ in
       serviceConfig = {
         Type = "exec";
         User = cfg.user;
-        ExecStart = pkgs.writeShellScriptBin "satisfactory-server" /* bash */ ''
+        ExecStart = pkgs.writeShellScript "satisfactory-server" /* bash */ ''
           mkdir -p "${cfg.stateDir}/.config/Epic/FactoryGame"
           ${lib.getExe cfg.package} ${lib.escapeShellArgs serverArgs}
         '';
