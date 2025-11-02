@@ -48,7 +48,7 @@ for recommended config tweaks\.
 
 
 *Type:*
-submodule
+attribute set of attribute set of attribute set of (signed integer or floating point number or string)
 
 
 

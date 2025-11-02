@@ -60,7 +60,7 @@ let
     "-Port=${toString cfg.port}"
     "-ReliablePort=${toString cfg.messagingPort}"
     "-ExternalReliablePort=${toString cfg.messagingPort}"
-    "-multihome=${cfg.multihome}"
+    "-multihome=${cfg.listenAddr}"
   ]
   ++ lib.optionals (!cfg.settings.seasonalEvents) [
     "-DisableSeasonalEvents"
@@ -163,19 +163,16 @@ in
         for recommended config tweaks.
       '';
 
-      type = types.submodule {
-        # generated via iniArgs
-        type = types.attrsOf (
+      type = types.attrsOf (
+        types.attrsOf (
           types.attrsOf (
-            types.attrsOf (
-              types.enum [
-                types.str
-                types.number
-              ]
-            )
+            types.oneOf [
+              types.number
+              types.str
+            ]
           )
-        );
-      };
+        )
+      );
 
       default = { };
 
