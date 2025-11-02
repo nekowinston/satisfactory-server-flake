@@ -37,6 +37,100 @@ package
 
 
 
+## services\.satisfactory\.iniSettings
+
+
+
+Freeform type to pass arbitrary ` -ini ` options to the server\.
+See e\.g\. the [Satisfactory Wiki](https://satisfactory\.wiki\.gg/wiki/Multiplayer\#Engine\.ini)
+for recommended config tweaks\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+` { } `
+
+
+
+*Example:*
+
+```
+{
+  Engine = {
+    "/Script/Engine.Player" = {
+      ConfiguredInternetSpeed = 104857600;
+      ConfiguredLanSpeed = 104857600;
+    };
+    "/Script/OnlineSubsystemUtils.IpNetDriver" = {
+      MaxClientRate = 104857600;
+      MaxInternetClientRate = 104857600;
+    };
+    "/Script/SocketSubsystemEpic.EpicNetDriver" = {
+      MaxClientRate = 104857600;
+      MaxInternetClientRate = 104857600;
+    };
+  };
+  Game = {
+    "/Script/Engine.GameNetworkManager" = {
+      MaxDynamicBandwidth = 104857600;
+      MinDynamicBandwidth = 10485760;
+      TotalNetBandwidth = 104857600;
+    };
+  };
+  Scalability = {
+    "NetworkQuality@3" = {
+      MaxDynamicBandwidth = 104857600;
+      MinDynamicBandwidth = 10485760;
+      TotalNetBandwidth = 104857600;
+    };
+  };
+}
+```
+
+
+
+## services\.satisfactory\.listenAddr
+
+
+
+See https://satisfactory\.wiki\.gg/wiki/Dedicated_servers\#Is_the_server_bound_to_the_correct_interface?
+Defaults to ` :: `, which means the server will listen on all interfaces\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "::" `
+
+
+
+## services\.satisfactory\.messagingPort
+
+
+
+Override the messaging port the server uses\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+` 8888 `
+
+
+
 ## services\.satisfactory\.openFirewall
 
 
@@ -64,7 +158,7 @@ boolean
 
 
 
-Override the Game Port the server uses\.
+Override the game port the server uses\.
 This is the primary port used to communicate game telemetry with the client\.
 If it is already in use, the server will step up to the next port until an available one is found\.
 
@@ -243,7 +337,7 @@ Directory to store the server state\.
 
 
 *Type:*
-path
+absolute path
 
 
 
