@@ -23,7 +23,7 @@
         import nixpkgs {
           inherit system;
           overlays = [
-            steam-fetcher.overlays.default
+            steam-fetcher.overlay
             self.overlays.default
           ];
         };
@@ -37,7 +37,7 @@
       };
 
       overlays.default = final: prev: {
-        satisfactory-server = (final.callPackage ./pkgs/satisfactory-server { }).fhs;
+        satisfactory-server = final.satisfactory-server-unwrapped.fhs;
         satisfactory-server-unwrapped = final.callPackage ./pkgs/satisfactory-server { };
       };
 
@@ -46,12 +46,14 @@
         let
           pkgs = pkgsFor system;
           version = self.shortRev or self.dirtyShortRev;
-          mkOptionDoc = args: (pkgs.callPackage ./pkgs/docs.nix { }) (args // { inherit version; });
         in
         {
           inherit (pkgs) satisfactory-server satisfactory-server-unwrapped;
           default = pkgs.satisfactory-server;
-          docs = mkOptionDoc { modules = [ self.nixosModules.satisfactory ]; };
+          docs = pkgs.callPackage ./pkgs/docs.nix {
+            inherit version;
+            modules = [ self.nixosModules.satisfactory ];
+          };
         }
       );
     };

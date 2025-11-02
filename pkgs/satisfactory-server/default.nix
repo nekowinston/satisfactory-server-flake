@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.fhs = buildFHSEnv {
-    name = finalAttrs.name;
+    inherit (finalAttrs) name meta;
     runScript = lib.getExe finalAttrs.finalPackage;
 
     targetPkgs = pkgs: [
@@ -54,8 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pulseaudio
       steamworks-sdk-redist
     ];
-
-    meta = finalAttrs.meta;
   };
 
   meta = {

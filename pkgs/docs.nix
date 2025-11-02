@@ -1,13 +1,13 @@
-{ lib, nixosOptionsDoc }:
-{ modules, version }:
+{
+  lib,
+  nixosOptionsDoc,
+  modules ? [ ],
+  version ? "unstable",
+}:
 let
   eval = lib.evalModules {
     modules = modules ++ [
-      {
-        config = {
-          _module.check = false;
-        };
-      }
+      { config._module.check = false; }
     ];
   };
 
