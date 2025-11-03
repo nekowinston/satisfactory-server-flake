@@ -37,6 +37,24 @@ package
 
 
 
+## services\.satisfactory\.extraArgs
+
+
+
+Any extra arguments thta should be passed to the Satisfactory server\. They will be shell-escaped\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+` [ ] `
+
+
+
 ## services\.satisfactory\.iniSettings
 
 
@@ -98,13 +116,15 @@ attribute set of attribute set of attribute set of (signed integer or floating p
 
 
 
-See https://satisfactory\.wiki\.gg/wiki/Dedicated_servers\#Is_the_server_bound_to_the_correct_interface?
 Defaults to ` :: `, which means the server will listen on all interfaces\.
+Set to ` null ` to disable passing in ` -multihome `\.
+
+See https://satisfactory\.wiki\.gg/wiki/Dedicated_servers\#Is_the_server_bound_to_the_correct_interface?
 
 
 
 *Type:*
-string
+null or string
 
 
 

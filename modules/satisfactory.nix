@@ -60,11 +60,14 @@ let
     "-Port=${toString cfg.port}"
     "-ReliablePort=${toString cfg.messagingPort}"
     "-ExternalReliablePort=${toString cfg.messagingPort}"
+  ]
+  ++ lib.optionals (cfg.listenAddr != null) [
     "-multihome=${cfg.listenAddr}"
   ]
   ++ lib.optionals (!cfg.settings.seasonalEvents) [
     "-DisableSeasonalEvents"
   ]
+  ++ cfg.extraArgs
   ++ iniArgs;
 in
 {
@@ -96,12 +99,22 @@ in
     };
 
     listenAddr = lib.mkOption {
-      type = types.str;
-      description = ''
-        See https://satisfactory.wiki.gg/wiki/Dedicated_servers#Is_the_server_bound_to_the_correct_interface?
-        Defaults to `::`, which means the server will listen on all interfaces.
-      '';
+      type = types.nullOr types.str;
       default = "::";
+      description = ''
+        Defaults to `::`, which means the server will listen on all interfaces.
+        Set to `null` to disable passing in `-multihome`.
+
+        See https://satisfactory.wiki.gg/wiki/Dedicated_servers#Is_the_server_bound_to_the_correct_interface?
+      '';
+    };
+
+    extraArgs = lib.mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        Any extra arguments thta should be passed to the Satisfactory server. They will be shell-escaped.
+      '';
     };
 
     messagingPort = lib.mkOption {
@@ -206,7 +219,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    nixpkgs.overlays = lib.mkDefault [
       self.overlays.default
       steam-fetcher.overlay
     ];

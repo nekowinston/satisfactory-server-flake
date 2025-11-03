@@ -7,6 +7,7 @@
       url = "github:nix-community/steam-fetcher";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-compat.url = "github:nixos/flake-compat";
   };
 
   outputs =
@@ -14,6 +15,7 @@
       self,
       nixpkgs,
       steam-fetcher,
+      ...
     }:
     let
       supportedSystems = [ "x86_64-linux" ];
@@ -45,14 +47,19 @@
         system:
         let
           pkgs = pkgsFor system;
+          modules = [ self.nixosModules.satisfactory ];
           version = self.shortRev or self.dirtyShortRev;
         in
         {
           inherit (pkgs) satisfactory-server satisfactory-server-unwrapped;
           default = pkgs.satisfactory-server;
+
           docs = pkgs.callPackage ./pkgs/docs.nix {
-            inherit version;
-            modules = [ self.nixosModules.satisfactory ];
+            inherit modules version;
+          };
+
+          tests.satisfactory-server = pkgs.callPackage ./tests/nixos.nix {
+            inherit modules;
           };
         }
       );
