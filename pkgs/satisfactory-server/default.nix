@@ -10,16 +10,17 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "satisfactory-server";
-  version = "19876517";
+  version = "20744297";
 
   binPath = lib.makeBinPath [ xdg-user-dirs ];
 
+  # https://steamdb.info/depot/1690802/history/
   src = fetchSteam {
     inherit (finalAttrs) name;
     appId = "1690800";
     depotId = "1690802";
-    manifestId = "7620210706575413121";
-    hash = "sha256-jQbtHSBFCDcdycrDjIJBY4DGV7EgITvwv3k3+htZ7io=";
+    manifestId = "3567604107698424381";
+    hash = "sha256-cIQFieQOz/Gh7VDAv2pS6FSE+ALqdMBl8iZkEMdPewA=";
   };
 
   dontBuild = true;
