@@ -24,6 +24,7 @@
         system:
         import nixpkgs {
           inherit system;
+          config.allowUnfree = true;
           overlays = [
             steam-fetcher.overlay
             self.overlays.default
