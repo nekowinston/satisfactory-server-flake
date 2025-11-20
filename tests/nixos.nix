@@ -20,6 +20,9 @@ testers.runNixOSTest {
         };
       };
 
+      # needs to be bumped to host a game session
+      virtualisation.memorySize = 4096;
+
       virtualisation.forwardPorts = [
         {
           host.port = cfg.port;

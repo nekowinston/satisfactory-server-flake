@@ -3,7 +3,6 @@
   fetchSteam,
   lib,
   makeWrapper,
-  pulseaudio,
   stdenvNoCC,
   steamworks-sdk-redist,
   xdg-user-dirs,
@@ -32,13 +31,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share $out/bin
-
-    cp -r . $out/share/satisfactory-server
-    chmod +x $out/share/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping
+    mkdir -p $out/{bin,opt}
+    cp -r . $out/opt/satisfactory-server
+    chmod +x $out/opt/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping
 
     makeWrapper \
-      $out/share/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping \
+      $out/opt/satisfactory-server/Engine/Binaries/Linux/FactoryServer-Linux-Shipping \
       $out/bin/satisfactory-server \
       --add-flags "FactoryGame" \
       --prefix PATH : ${finalAttrs.binPath}
@@ -52,7 +50,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     targetPkgs = pkgs: [
       finalAttrs.finalPackage
-      pulseaudio
       steamworks-sdk-redist
     ];
   };

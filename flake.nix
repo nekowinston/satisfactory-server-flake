@@ -11,31 +11,28 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      steam-fetcher,
-      ...
-    }:
+    { self, steam-fetcher, ... }@inputs:
     let
-      supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      pkgsFor =
-        system:
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = [
-            steam-fetcher.overlay
-            self.overlays.default
-          ];
+      pkgs = import inputs.nixpkgs {
+        system = "x86_64-linux";
+        config = {
+          allowUnfree = true;
         };
+        overlays = [
+          steam-fetcher.overlay
+          self.overlays.default
+        ];
+      };
+      modules = [ self.nixosModules.satisfactory ];
+      version = self.shortRev or self.dirtyShortRev;
     in
     {
-      formatter = forAllSystems (system: (pkgsFor system).nixfmt-rfc-style);
+      formatter.x86_64-linux = pkgs.nixfmt-rfc-style;
 
       nixosModules = {
-        satisfactory = import ./modules/satisfactory.nix { inherit self steam-fetcher; };
+        satisfactory = import ./modules/satisfactory.nix {
+          inherit self steam-fetcher;
+        };
         default = self.nixosModules.satisfactory;
       };
 
@@ -44,25 +41,18 @@
         satisfactory-server-unwrapped = final.callPackage ./pkgs/satisfactory-server { };
       };
 
-      packages = forAllSystems (
-        system:
-        let
-          pkgs = pkgsFor system;
-          modules = [ self.nixosModules.satisfactory ];
-          version = self.shortRev or self.dirtyShortRev;
-        in
-        {
-          inherit (pkgs) satisfactory-server satisfactory-server-unwrapped;
-          default = pkgs.satisfactory-server;
+      packages.x86_64-linux = {
+        default = pkgs.satisfactory-server;
 
-          docs = pkgs.callPackage ./pkgs/docs.nix {
-            inherit modules version;
-          };
+        docs = pkgs.callPackage ./pkgs/docs.nix {
+          inherit modules version;
+        };
 
-          tests.satisfactory-server = pkgs.callPackage ./tests/nixos.nix {
-            inherit modules;
-          };
-        }
-      );
+        tests.satisfactory-server = pkgs.callPackage ./tests/nixos.nix {
+          inherit modules;
+        };
+
+        inherit (pkgs) satisfactory-server satisfactory-server-unwrapped;
+      };
     };
 }
