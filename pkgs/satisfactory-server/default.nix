@@ -9,7 +9,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "satisfactory-server";
-  version = "21009728";
+  version = "23855705";
 
   binPath = lib.makeBinPath [ xdg-user-dirs ];
 
@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) name;
     appId = "1690800";
     depotId = "1690802";
-    manifestId = "9010092523785701342";
-    hash = "sha256-kM7X18Ct2dGENISE1VYRjFZjCE3j/+fSPBS+knFz3DM=";
+    manifestId = "2689605844763498299";
+    hash = "sha256-rE18FQWY36S4qy7A96zn/7mk6LUcRYb2hyF+l54CZeo=";
   };
 
   dontBuild = true;
